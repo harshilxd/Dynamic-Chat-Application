@@ -46,7 +46,7 @@ const login = async (req, res) => {
         if (userData){
             console.log("Received password during login:", password); // Debugging log
             console.log("Stored hashed password:", userData.password);
-            const passwordMatch = bcrypt.compare(password, userData.password);
+            const passwordMatch = await bcrypt.compare(password, userData.password);
             if (passwordMatch){
                 req.session.user = userData;
                 res.redirect('/dashboard');
