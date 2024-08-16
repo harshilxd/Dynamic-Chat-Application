@@ -5,7 +5,14 @@ require('dotenv').config();
 
 const session = require('express-session');
 const {SESSION_SECRET} = process.env;
-user_route.use(session({ secret:SESSION_SECRET }));
+user_route.use(session({
+    secret: SESSION_SECRET,
+    resave: false,             // Avoid resaving session if unmodified
+    saveUninitialized: false,  // Avoid saving uninitialized sessions
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24  // Session expiration time (e.g., 1 day)
+    }
+}));
 
 const bodyParser = require('body-parser');
 user_route.use(bodyParser.json());
