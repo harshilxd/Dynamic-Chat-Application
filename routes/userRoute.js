@@ -1,8 +1,13 @@
 const express = require('express');
 const user_route = express();
 
-const bodyParser = require('body-parser');
+require('dotenv').config();
 
+const session = require('express-session');
+const {SESSION_SECRET} = process.env;
+user_route.use(session({ secret:SESSION_SECRET }));
+
+const bodyParser = require('body-parser');
 user_route.use(bodyParser.json());
 user_route.use(bodyParser.urlencoded({extended: true}));
 
@@ -31,4 +36,13 @@ const userController = require('../controllers/userController');
 user_route.get('/register', userController.registerLoad);
 user_route.post('/register', upload.single('image'),userController.register);
 
+user_route.get('/' , userController.loadLogin);
+user_route.post('/' , userController.login);
+user_route.get('/logout' , userController.logout);
+
+user_route.get('/dashboard' , userController.loadDashboard);
+
+user_route.get('*', function(req, res){
+    res.redirect('/');
+});
 module.exports = user_route;
